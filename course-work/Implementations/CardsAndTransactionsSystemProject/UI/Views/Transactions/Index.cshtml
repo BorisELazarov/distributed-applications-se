@@ -1,0 +1,111 @@
+﻿@model UI.ViewModels.Transactions.IndexVM
+@using UI.ViewModels.Transactions;
+@using UI.Enums.Transactions;
+@{
+    this.Layout = "/Views/Shared/_Layout.cshtml";
+    ViewData["title"] = "Transactions";
+    string controller = this.ViewContext.RouteData.Values["controller"].ToString();
+    string action = this.ViewContext.RouteData.Values["action"].ToString();
+}
+<form action="/@controller/@action" method="get">
+    <div class="grid">
+        @Html.HiddenFor(m => m.Pager.ItemsPerPage)
+        @Html.HiddenFor(m => m.Filter.CardId)
+        <div class="row">
+            <div class="col-2">@Html.LabelFor(m => m.Filter.Title)</div>
+            <div class="col-2">@Html.TextBoxFor(m => m.Filter.Title)</div>
+            <div class="col-2">
+                Sort by:
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2">@Html.LabelFor(m => m.Filter.Sum)</div>
+            <div class="col-2">@Html.TextBoxFor(m => m.Filter.Sum)</div>
+            <div class="col-2">
+                @Html.DropDownListFor(m => m.OrderBy.Value,
+                         new SelectList(Enum.GetValues(typeof(Sort))))
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2">@Html.LabelFor(m => m.Filter.IBAN)</div>
+            <div class="col-2">@Html.TextBoxFor(m => m.Filter.IBAN)</div>
+        </div>
+        <div class="row">
+            <div class="col-2">@Html.LabelFor(m => m.Filter.DateOfTransaction)</div>
+            <div class="col-2">
+                @Html.EditorFor(m => m.Filter.DateOfTransaction,
+                         new
+                         {
+                             htmlAttributes
+                         = new { @class = "form-control", type = "date" }
+                         }
+                         )
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                <input class="right" type="submit" value="Search" />
+                <a class="right" href="/@controller/@action?id=@Model.Filter.CardId">Clear</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+<hr />
+<a href="/@controller/Create?id=@Model.Filter.CardId">Create Transaction</a>
+<div class="grid">
+    <div class="row">
+        <div class="col-2">Title</div>
+        <div class="col-2">IBAN</div>
+        <div class="col-2">Date Of Transaction</div>
+        <div class="col-2">Sum</div>
+        <div class="col-2"></div>
+    </div>
+    @foreach (DetailsVM transaction in Model.Items)
+    {
+        <div class="row">
+            <div class="col-2">@transaction.Title</div>
+            <div class="col-2">@transaction.IBAN</div>
+            <div class="col-2">@transaction.DateOfTransaction</div>
+            <div class="col-2">@transaction.Sum</div>
+            <div class="col-2">
+                <a href="/@controller/Details?Id=@transaction.Id">details</a>
+                <a href="/@controller/Delete?Id=@transaction.Id&CardId=@Model.Filter.CardId"
+                   onclick="return confirm('Delete Record?');">delete</a>
+            </div>
+        </div>
+    }
+    <div class="row pager">
+        <div class="col-3">
+            @for (int i = 0; i < Model.Pager.PagesCount; i++)
+            {
+                <a href="/@controller/@action?Pager.Page=@(i+1)&Pager.ItemsPerPage=@Model.Pager.ItemsPerPage
+                    &Filter.Title=@Model.Filter.Title&Filter.Sum=@Model.Filter.Sum&Filter.DateOfTransaction
+                    =@Model.Filter.DateOfTransaction&Filter.IBAN=@Model.Filter.IBAN
+                    &OrderBy=@Model.OrderBy.Value&id=@Model.Filter.CardId">
+                    @(i + 1)
+                </a>
+            }
+
+            <script>
+                function ddlItemsPerPage_OnChange() {
+                    let control = document.getElementById("ddlItemsPerPage");
+
+                    document.location.href = "/@controller/@action?Pager.ItemsPerPage=" + control.value
+                        + "&Filter.Title=@Model.Filter.Title&Filter.Balance=@Model.Filter.Sum"+
+                        "&Filter.Sum=@Model.Filter.Sum&Filter.DateOfTransaction"+
+                        "=@Model.Filter.DateOfTransaction& Filter.IBAN=@Model.Filter.IBAN"+
+                        "&OrderBy=@Model.OrderBy.Value&id=@Model.Filter.CardId";
+                }
+            </script>
+            @Html.DropDownList("ddlItemsPerPage",
+                     new List<SelectListItem>
+            {
+            new SelectListItem { Value = "3", Text = "3", Selected = Model.Pager.ItemsPerPage == 3 },
+            new SelectListItem { Value = "5", Text = "5", Selected = Model.Pager.ItemsPerPage == 5 },
+            new SelectListItem { Value = "10", Text = "10", Selected = Model.Pager.ItemsPerPage == 10 }
+            },
+                     new { id = "ddlItemsPerPage", onchange = "ddlItemsPerPage_OnChange()" })
+        </div>
+    </div>
+</div>

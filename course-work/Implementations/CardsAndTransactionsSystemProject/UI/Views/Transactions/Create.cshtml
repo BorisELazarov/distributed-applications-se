@@ -1,0 +1,59 @@
+﻿@model UI.ViewModels.Transactions.CreateVM
+
+@{
+    this.Layout = "/Views/Shared/_Layout.cshtml";
+    ViewData["title"] = "Send Money";
+}
+
+<fieldset>
+    <legend>Send money</legend>
+    <form action="/Transactions/Create" method="post">
+        <div class="grid">
+            @Html.HiddenFor(m=>m.CardId)
+            <div class="row">
+                <div class="col-1">@Html.LabelFor(m => m.Title)</div>
+                <div class="col-2">
+                    @Html.TextBoxFor(m => m.Title)
+                </div>
+                <div class="col-2">
+                    @Html.ValidationMessageFor(m => m.Title)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1">@Html.LabelFor(m => m.Description)</div>
+                <div class="col-2">
+                    @Html.TextAreaFor(m => m.Description)
+                </div>
+                <div class="col-2">
+                    @Html.ValidationMessageFor(m => m.Description)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1">@Html.LabelFor(m => m.IBAN)</div>
+                <div class="col-2">
+                    @Html.TextBoxFor(m => m.IBAN)
+                </div>
+                <div class="col-2">
+                    @Html.ValidationMessageFor(m => m.IBAN)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1">@Html.LabelFor(m => m.Sum)</div>
+                <div class="col-2">
+                    @Html.TextBoxFor(m => m.Sum)
+                </div>
+                <div class="col-2">
+                    @Html.ValidationMessageFor(m => m.Sum)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1"></div>
+                <div class="col-2">
+                    <input type="submit" class="right" value="Create" />
+                    <a class="right" href="/Transactions/Index?id=@Model.CardId">Back</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</fieldset>
+

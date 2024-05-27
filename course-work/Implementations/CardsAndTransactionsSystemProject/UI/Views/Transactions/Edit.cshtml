@@ -1,0 +1,46 @@
+﻿@model UI.ViewModels.Transactions.EditVM
+
+@{
+    this.Layout = "/Views/Shared/_Layout.cshtml";
+    ViewData["title"] = "Edit Transaction";
+}
+
+<fieldset>
+    <legend>Edit transaction's info</legend>
+    <form action="/Transactions/Edit" method="post">
+        <div class="grid">
+            @Html.HiddenFor(m=>m.Id)
+            @Html.HiddenFor(m => m.CardId)
+            @Html.HiddenFor(m => m.IBAN)
+            @Html.HiddenFor(m => m.Sum)
+            @Html.HiddenFor(m => m.DateOfTransaction)
+            <div class="row">
+                <div class="col-1">@Html.LabelFor(m => m.Title)</div>
+                <div class="col-2">
+                    @Html.TextBoxFor(m => m.Title)
+                </div>
+                <div class="col-2">
+                    @Html.ValidationMessageFor(m => m.Title)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1">@Html.LabelFor(m => m.Description)</div>
+                <div class="col-2">
+                    @Html.TextAreaFor(m => m.Description)
+                </div>
+                <div class="col-2">
+                    @Html.ValidationMessageFor(m => m.Description)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1"></div>
+                <div class="col-2">
+                    <input type="submit" class="right" value="Edit" />
+                    <a class="right" href="/Transactions/Details?id=@Model.Id">Back</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</fieldset>
+
+

@@ -1,0 +1,6 @@
+@CardsAndTransactionsSystemProject_HostAddress = http://localhost:5067
+
+GET {{CardsAndTransactionsSystemProject_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

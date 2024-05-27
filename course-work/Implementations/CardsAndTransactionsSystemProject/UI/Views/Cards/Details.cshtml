@@ -1,0 +1,60 @@
+﻿@model UI.ViewModels.Cards.DetailsVM
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Card details:</h1>
+
+<div>
+    <hr />
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m=>m.UserId)
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(m => m.Title)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(m => m.Title)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(m => m.Balance)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(m => m.Balance)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(m => m.IBAN)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(m => m.IBAN)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(m => m.CardNumber)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(m => m.CardNumber)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(m => m.ValidThru)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(m => m.ValidThru)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(m => m.SecurityCode)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(m => m.SecurityCode)
+        </dd>
+    </dl>
+    <dl class="row">
+        <dd>
+            <a href="/Cards/ChangeInfo?Id=@Model.Id">Change info</a>|
+            <a href="/Cards/Renew?Id=@Model.Id">Renew</a>|
+            <a href="/Transactions/Index?id=@Model.Id">Transactions</a>
+        <dd>
+            <a href="/Cards/Index?Id=@Model.UserId">Back</a>
+        </dd>
+    </dl>
+</div>

@@ -1,0 +1,46 @@
+﻿@model UI.ViewModels.Cards.ChangeInfoVM
+
+@{
+    this.Layout = "/Views/Shared/_Layout.cshtml";
+    ViewData["title"] = "Change Info";
+}
+
+<fieldset>
+    <legend>Change information</legend>
+    <form action="/Cards/ChangeInfo" method="post">
+        <div class="grid">
+            @Html.HiddenFor(m=>m.Id)
+            @Html.HiddenFor(m=>m.UserId)
+            @Html.HiddenFor(m=>m.CardNumber)
+            @Html.HiddenFor(m => m.IBAN)
+            @Html.HiddenFor(m => m.ValidThru)
+            @Html.HiddenFor(m => m.SecurityCode)
+            <div class="row">
+                <div class="col-1">@Html.LabelFor(m => m.Title)</div>
+                <div class="col-2">
+                    @Html.TextBoxFor(m => m.Title)
+                </div>
+                <div class="col-2">
+                    @Html.ValidationMessageFor(m => m.Title)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1">@Html.LabelFor(m => m.Balance)</div>
+                <div class="col-2">
+                    @Html.TextBoxFor(m => m.Balance)
+                </div>
+                <div class="col-2">
+                    @Html.ValidationMessageFor(m => m.Balance)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-1"></div>
+                <div class="col-2">
+                    <input type="submit" class="right" value="Edit" />
+                    <a class="right" href="/Cards/Details?Id=@Model.Id">Back</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</fieldset>
+

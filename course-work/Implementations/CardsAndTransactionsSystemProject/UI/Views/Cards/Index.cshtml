@@ -1,0 +1,91 @@
+﻿@model UI.ViewModels.Cards.IndexVM
+@using UI.ViewModels.Cards;
+@using UI.Enums.Cards;
+@{
+    this.Layout = "/Views/Shared/_Layout.cshtml";
+    ViewData["title"] = "Cards";
+    string controller = this.ViewContext.RouteData.Values["controller"].ToString();
+    string action = this.ViewContext.RouteData.Values["action"].ToString();
+}
+<form action="/@controller/@action" method="get">
+    <div class="grid">
+        @Html.HiddenFor(m => m.Pager.ItemsPerPage)
+        <div class="row">
+            <div class="col-1">@Html.LabelFor(m=>m.Filter.Title)</div>
+            <div class="col-2">@Html.TextBoxFor(m => m.Filter.Title)</div>
+            <div class="col-2">
+                Sort by:
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-1">@Html.LabelFor(m=>m.Filter.Balance)</div>
+            <div class="col-2">@Html.TextBoxFor(m => m.Filter.Balance)</div>
+            <div class="col-2">
+                @Html.DropDownListFor(m=>m.OrderBy.Value,
+                new SelectList(Enum.GetValues(typeof(Sort))))
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                <input class="right" type="submit" value="Search" />
+                <a class="right" href="/@controller/@action">Clear</a>
+            </div>
+        </div>
+    </div>
+</form>
+<hr />
+<a href="/@controller/Create?Id=@Model.Filter.UserId">Create Card</a>
+<div class="grid">
+    <div class="row">
+        <div class="col-2">Title</div>
+        <div class="col-2">IBAN</div>
+        <div class="col-2">Balance</div>
+        <div class="col-2">ValidThru</div>
+        <div class="col-2"></div>
+    </div>
+    @foreach (DetailsVM card in Model.Items)
+    {
+        <div class="row">
+            <div class="col-2">@card.Title</div>
+            <div class="col-2">@card.IBAN</div>
+            <div class="col-2">@card.Balance</div>
+            <div class="col-2">@card.ValidThru</div>
+            <div class="col-2">
+                <a href="/@controller/Details?Id=@card.Id">details</a>
+                <a href="/@controller/Delete?Id=@card.Id&UserId=@Model.Filter.UserId"
+               onclick="return confirm('Delete Record?');">delete</a>
+            </div>
+        </div>
+    }
+    <div class="row pager">
+        <div class="col-3">
+            @for (int i = 0; i < Model.Pager.PagesCount; i++)
+            {
+                <a href="/@controller/@action?Pager.Page=@(i+1)&Pager.ItemsPerPage=@Model.Pager.ItemsPerPage&Filter.Title=@Model.Filter.Title&Filter.Balance=@Model.Filter.Balance&OrderBy=@Model.OrderBy.Value">
+                    @(i + 1)
+                </a>
+            }
+
+            <script>
+                function ddlItemsPerPage_OnChange() {
+                    let control = document.getElementById("ddlItemsPerPage");
+
+                    document.location.href = "/@controller/@action?Pager.ItemsPerPage=" + control.value
+                        + "&Filter.Title=@Model.Filter.Title&Filter.Balance=@Model.Filter.Balance";
+
+                    let pgs = @Model.Pager.PagesCount;
+                    control.value = pgs;
+                }
+            </script>
+            @Html.DropDownList("ddlItemsPerPage",
+                     new List<SelectListItem>
+            {
+            new SelectListItem { Value = "3", Text = "3", Selected = Model.Pager.ItemsPerPage == 3 },
+            new SelectListItem { Value = "5", Text = "5", Selected = Model.Pager.ItemsPerPage == 5 },
+            new SelectListItem { Value = "10", Text = "10", Selected = Model.Pager.ItemsPerPage == 10 }
+            },
+            new { id = "ddlItemsPerPage", onchange = "ddlItemsPerPage_OnChange()" })
+        </div>
+    </div>
+</div>
+
